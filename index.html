@@ -2,20 +2,272 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="page.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Debris Collector Game</title>
+    <title>Game Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        :root {
+            --primary: #FFAE9D;
+            --secondary: #B39188;
+            --card-bg: #CCAEA4;
+            --text: #050505;
+        }
+
+        body {
+            overflow: auto; /* Allow scrolling */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* Background iframe */
+        .background-iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            border: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .title {
+            color: var(--text);
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            padding-top: 1rem;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .game-info {
+            padding: 1.5rem;
+        }
+
+        .game-title {
+            color: var(--text);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: block;             /* Make the button a block element */
+            margin: 0 auto;            /* Center horizontally */
+            padding: 10px 20px;        /* Button padding */
+            font-size: 18px;           /* Font size */
+            background-color: #4a90e2; /* Background color */
+            color: white;              /* Text color */
+            border: none;              /* Remove border */
+            border-radius: 5px;       /* Rounded corners */
+            cursor: pointer;           /* Pointer cursor on hover */
+            transition: background 0.3s; /* Smooth background transition */
+        }
+
+        .btn:hover {
+            background-color: #367bc9; /* Darker shade on hover */
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--text);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Play Screen Overlay */
+        .play-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            z-index: 2;
+        }
+
+        .play-screen.active {
+            display: flex;
+        }
+
+        .play-title {
+            color: var(--text);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        #noBtn {
+            background-color: var(--secondary);
+            transition: transform 0.3s ease;
+        }
+        .game-video {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <body>
-    <div class="game-container" id="gameContainer">
-        <div class="score">Score: <span id="scoreValue">0</span></div>
-        <div class="game-over" id="gameOver">
-            Game Over!<br>
-            Final Score: <span id="finalScore">0</span><br>
-            <button onclick="resetGame()">Play Again</button>
+    <!-- Background iframe -->
+    <iframe src="/Infinite Space Animation/index.html" class="background-iframe" aria-hidden="true"></iframe>
+
+    <div class="container">
+        <h1 class="title" style="color: aliceblue;">Game Collection</h1>
+        <div class="games-grid" id="gamesGrid"></div>
+    </div>
+
+    <div class="play-screen" id="playScreen">
+        <div class="play-content">
+            <h2 class="play-title" style="color: aliceblue;">Do you want to play a game?</h2>
+            <div class="btn-container">
+                <button class="btn btn-primary" id="yesBtn">YES</button>
+                <button class="btn" id="noBtn">NO</button>
+            </div>
         </div>
     </div>
-    <script src="page.js"></script>
+
+    <!-- Background Music -->
+    <audio id="backgroundMusic" src="Media/music/1.mp3" autoplay loop></audio>
+
+    <script>
+        const games = [
+            { id: 1, title: 'Beyond Boundaries Game', video: 'Media/videos/1.mp4', path: 'Beyond Boundaries Game/index.html' },
+            { id: 2, title: 'Bubble Pop Adventure', video: 'Media/videos/2.mp4', path: 'Bubble Pop Adventure/index.html' },
+            { id: 3, title: 'Gravity Paint', video: 'Media/videos/3.mp4', path: 'Gravity Paint - Interactive Art Game/index.html' },
+            { id: 4, title: 'Infinite Scrolling Beyond', video: 'Media/videos/4.mp4', path: 'Infinite Scrolling Beyond Boundaries/index.html' },
+            { id: 5, title: 'Space Debris Collector', video: 'Media/videos/5.mp4', path: 'Space Debris Collector Game/index.html' },
+            { id: 6, title: 'Musical Light Grid', video: 'Media/videos/6.mp4', path: 'Musical Light Grid/index.html' },
+        ];
+
+        let selectedGamePath = '';
+
+        const gamesGrid = document.getElementById('gamesGrid');
+        const playScreen = document.getElementById('playScreen');
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const music = document.getElementById('backgroundMusic');
+        // Generate game cards
+        games.forEach(game => {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.innerHTML = `
+                <video src="${game.video}" class="game-video" autoplay loop muted></video>
+                <div class="game-info">
+                    <h2 class="game-title">${game.title}</h2>
+                    <button class="btn btn-primary play-btn">Play Now</button>
+                </div>
+            `;
+            gamesGrid.appendChild(card);
+
+            card.querySelector('.play-btn').addEventListener('click', () => {
+                selectedGamePath = game.path;
+                playScreen.classList.add('active');
+            });
+        });
+
+        noBtn.addEventListener('mouseover', () => {
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+        });
+
+        yesBtn.addEventListener('click', () => {
+            if (selectedGamePath) {
+                window.location.href = selectedGamePath;
+            } else {
+                alert('Please select a game first!');
+            }
+        });
+
+        playScreen.addEventListener('click', (e) => {
+            if (e.target === playScreen) {
+                playScreen.classList.remove('active');
+                noBtn.style.position = 'static';
+            }
+        });
+      // Try to play music automatically
+      document.addEventListener('click', () => {
+            music.play().catch(error => {
+                console.log("Playback failed:", error);
+            });
+        });
+
+        // Play music on page load if user interaction has occurred
+        window.addEventListener('load', () => {
+            music.play().catch(error => {
+                console.log("Playback failed:", error);
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/Musical Light Grid/page.css">
+
+    <title>Music Light Grid</title>
+</head>
+<body>
+    <div class="grid-container" id="grid"></div>
+    <div class="playhead" id="playhead"></div>
+    <div class="controls">
+        <button id="playButton">Play/Pause</button>
+        <button id="clearButton">Clear Grid</button>
+        <div>
+            <label>Speed:</label>
+            <input type="range" id="speedSlider" min="50" max="300" value="120">
+        </div>
+        <div>
+            <label>Scale:</label>
+            <select id="scaleSelect">
+                <option value="pentatonic">Pentatonic</option>
+                <option value="major">Major</option>
+                <option value="minor">Minor</option>
+                <option value="blues">Blues</option>
+            </select>
+        </div>
+        <div class="color-selector" id="colorSelector"></div>
+    </div>
+    <script src="/Musical Light Grid/page.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/Gravity Paint - Interactive Art Game/page.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravity Paint - Interactive Art Game</title>
+
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="controls">
+        <div class="color-picker" id="colorPicker"></div>
+        <div>
+            <label>Size:</label>
+            <input type="range" min="5" max="50" value="20" class="size-slider" id="sizeSlider">
+        </div>
+        <div class="gravity-control">
+            <label>Gravity:</label>
+            <button id="gravityToggle">Toggle</button>
+            <button id="reverseGravity">Reverse</button>
+        </div>
+        <button id="clear">Clear Canvas</button>
+        <button id="saveImage">Save Image</button>
+    </div>
+    <div class="tutorial">
+        Click and drag to create paint drops<br>
+        Space: Toggle gravity | R: Reverse gravity
+    </div>
+    <script src="/Gravity Paint - Interactive Art Game/page.js"></script>
+</body>
+</html>
