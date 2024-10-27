@@ -255,19 +255,6 @@
                 noBtn.style.position = 'static';
             }
         });
-      // Try to play music automatically
-      document.addEventListener('click', () => {
-            music.play().catch(error => {
-                console.log("Playback failed:", error);
-            });
-        });
-
-        // Play music on page load if user interaction has occurred
-        window.addEventListener('load', () => {
-            music.play().catch(error => {
-                console.log("Playback failed:", error);
-            });
-        });
     </script>
 </body>
 </html>
